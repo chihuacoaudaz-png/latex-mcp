@@ -49,6 +49,13 @@ def sanitize_latex(latex_code: str) -> str:
     for pat in cite_patterns:
         s = re.sub(pat, '', s, flags=re.IGNORECASE)
 
+    # Convertir caracteres unicode especiales a comandos LaTeX validos
+    s = s.replace('\u2022', r'\textbullet{} ')  # Bala unicode •
+    s = s.replace('\u00b7', r' \textbar{} ')   # Punto medio ·
+    s = s.replace('\u2013', '--')             # En-dash –
+    s = s.replace('\u2014', '---')            # Em-dash —
+    s = s.replace('\ufffd', '')               # Caracter corrupto de reemplazo
+
     # Asegurar nombre canonico en encabezados
     s = re.sub(r'CESAR\s+ANCIETA', 'CESAR CONTRERAS ANCIETA', s, flags=re.IGNORECASE)
     s = re.sub(r'CÉSAR\s+ANCIETA', 'CESAR CONTRERAS ANCIETA', s, flags=re.IGNORECASE)
